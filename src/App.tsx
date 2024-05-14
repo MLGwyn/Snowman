@@ -1,37 +1,68 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Words from './words.json'
 
 export function App() {
+  const alphabet = Array.from({ length: 26 }, (_, i) =>
+    String.fromCharCode(65 + i)
+  )
+  const random = Math.floor(Math.random() * Words.length)
+  const randomWord = Words[random]
+
+  const [chosenWord] = useState(randomWord)
+  const [guesses, setGuesses] = useState<string[]>([])
+
+  function handleGuessLetter(letter: string) {
+    if (checkLetter(letter)) return
+    setGuesses([...guesses, letter])
+  }
+  function checkLetter(letter: string) {
+    return guesses.includes(letter)
+  }
+  function snowmanSteps(): number {
+    return chosenWord
+      .toUpperCase()
+      .split('')
+      .reduce((count, letter) => {
+        return count + (checkLetter(letter) ? 1 : 0)
+      }, 0)
+  }
+
   return (
     <main className="snowman-game">
       <h1>Lets Build A Snowman!</h1>
-      <section>Snowman Images go here</section>
-      <section>this is blank space / where letters appear</section>
-      <button>A</button>
-      <button>B</button>
-      <button>C</button>
-      <button>D</button>
-      <button>E</button>
-      <button>F</button>
-      <button>G</button>
-      <button>H</button>
-      <button>I</button>
-      <button>J</button>
-      <button>K</button>
-      <button>L</button>
-      <button>M</button>
-      <button>N</button>
-      <button>O</button>
-      <button>P</button>
-      <button>Q</button>
-      <button>R</button>
-      <button>S</button>
-      <button>T</button>
-      <button>U</button>
-      <button>V</button>
-      <button>W</button>
-      <button>X</button>
-      <button>Y</button>
-      <button>Z</button>
+      <img
+        src={`/snowman/step_${snowmanSteps()}.png`}
+        alt={`${snowmanSteps()} correct letters `}
+      ></img>
+      {/* {guesses} */}
+      {/* <code>{JSON.stringify(alphabet)}</code> */}
+      {/* {chosenWord} */}
+      {/* {snowmanSteps()} */}
+      <h1>
+        <div className="guessed-word">
+          {chosenWord
+            .toUpperCase()
+            .split('')
+            .map((letter) =>
+              checkLetter(letter) ? (
+                <span className="guessed-letter">{letter}</span>
+              ) : (
+                <span className="blank"> - </span>
+              )
+            )}
+        </div>
+      </h1>
+      <section>
+        {alphabet.map((letter: string) => (
+          <button
+            onClick={() => handleGuessLetter(letter)}
+            disabled={checkLetter(letter)}
+            key="alphabet"
+          >
+            {letter}
+          </button>
+        ))}
+      </section>
     </main>
   )
 }
