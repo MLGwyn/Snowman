@@ -34,10 +34,7 @@ export function App() {
         src={`/snowman/step_${snowmanSteps()}.png`}
         alt={`${snowmanSteps()} correct letters `}
       ></img>
-      {/* {guesses} */}
-      {/* <code>{JSON.stringify(alphabet)}</code> */}
-      {/* {chosenWord} */}
-      {/* {snowmanSteps()} */}
+
       <h1>
         <div className="guessed-word">
           {chosenWord
